@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Llama Index RAG Application</title>
+
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Left Half: Document Index Form -->
+            <div class="col-md-6 mb-3">
+                <div class="rounded border p-3">
+                    <h2 class="mb-3">Index Document</h2>
+                    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                        <p class="text-success" id="serverResponse"></p>
+                        <div class="mb-3">
+                            <label for="document" class="form-label">Choose a document file (txt)</label>
+                            <input type="file" class="form-control" id="document" name="document" accept=".txt" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Index Document</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // submit document upload form
+        const responseField = document.querySelector('#serverResponse')
+        const uploadForm = document.querySelector('#uploadForm')
+        uploadForm.onsubmit = (event) => {
+            event.preventDefault()
+
+            const formData = new FormData(event.target)
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then(({ message }) => {
+                    responseField.innerHTML = message
+                })
+                .catch((error) => {
+                    console.error('Error uploading file:', error)
+                })
+        }
+    </script>
+</body>
+
+</html>
